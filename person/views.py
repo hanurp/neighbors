@@ -1,5 +1,5 @@
 import operator
-import Geohash
+import geohash
 import logging
 import time
 
@@ -22,6 +22,12 @@ class PersonSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name', 'lon', 'lat', 'geo_hash', 'url')
 
 
+class PersonSerializerLight(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ('name', )
+
+
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
@@ -38,7 +44,7 @@ def search_person_by_geohash(point, persons_set, limit):
     Данную функцию целосообразно использовать если базе много записей
     """
     start_hash_length = getattr(settings, "START_HASH_LENGTH_SEARCH", 8)
-    point_hash = Geohash.encode(*point)
+    point_hash = geohash.encode(*point)
     selected_persons = []
     more_need_items = limit
     last_hash_length = 0
@@ -80,5 +86,5 @@ def person_search_nearby(request):
             return Response({"msg": "не корректно указаны координаты"}, status.HTTP_400_BAD_REQUEST)  # todo переделать вывод ошибки в стандартном формате
         persons_set = Person.objects.all()
         persons = search_person_by_geohash(point, persons_set, limit)
-        serializer = PersonSerializer(persons, many=True)
+        serializer = PersonSerializerLight(persons, many=True)
         return Response(serializer.data)

@@ -1,5 +1,5 @@
 from django.db import models
-import Geohash
+import geohash
 
 
 class Person(models.Model):
@@ -9,7 +9,7 @@ class Person(models.Model):
     geo_hash = models.CharField(max_length=100, db_index=True, editable=False)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.geo_hash = Geohash.encode(longitude=self.lon, latitude=self.lat)
+        self.geo_hash = geohash.encode(longitude=self.lon, latitude=self.lat)
         if update_fields:
             update_fields = update_fields + ['geo_hash']
 
