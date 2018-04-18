@@ -1,0 +1,4 @@
+django == 2.0.4
+djangorestframework == 3.7.7
+python-geohash == 0.8.5
+geopy == 1.13.0

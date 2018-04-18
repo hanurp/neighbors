@@ -1,0 +1,8 @@
+*.pyc
+*_pb2.py
+*.html.py
+*.txt.py
+/main/settings.py
+/.idea
+*[.|_]gi.*
+node_modules
